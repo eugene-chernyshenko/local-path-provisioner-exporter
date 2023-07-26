@@ -22,7 +22,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: app
-        image: echern/local-path-provisioner-exporter:0.1.0
+        image: echern/local-path-provisioner-exporter:0.1.1
         env:
         - name: DEFAULT_PATH
           value: /data/local-path-provisioner

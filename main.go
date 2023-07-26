@@ -61,6 +61,8 @@ func main() {
 	go RecordMetrics(ctx, &config, clientset, metrics)
 
 	http.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{Registry: reg}))
+
+	log.Info("starting server on :2112")
 	http.ListenAndServe(":2112", nil)
 }
 
@@ -121,6 +123,7 @@ func RecordMetrics(ctx context.Context, config *Config, clientset *kubernetes.Cl
 			key := fmt.Sprintf("%s_%s_%s", pvc.Spec.VolumeName, pvc.ObjectMeta.Namespace, pvc.ObjectMeta.Name)
 			sizeUsedBytes, ok := sizeMap[key]
 			if ok {
+				log.Info("updating metrics for pvc ", pvc.ObjectMeta.Namespace, "/", pvc.ObjectMeta.Name)
 				sizeRequestedBytes, err := humanize.ParseBytes(pvc.Spec.Resources.Requests.Storage().String())
 				if err != nil {
 					log.Error(err)
